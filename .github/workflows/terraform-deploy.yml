@@ -1,0 +1,41 @@
+name: Terraform Deploy with Monitoring
+
+on:
+  push:
+    branches:
+      - main  # Trigger on merge into main branch
+
+jobs:
+  terraform:
+    name: Terraform Apply and Monitoring Setup
+    runs-on: ubuntu-latest
+
+    env:
+      TF_VAR_aws_region: us-east-1
+      # Add any other necessary environment variables here
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.11.1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Terraform Apply
+        if: github.event_name == 'push'
+        run: terraform apply -auto-approve tfplan
+
+      - name: Post-deployment
+        # Option 1: If monitoring is part of your Terraform code, this step may be omitted.
+        # Option 2: Run a script to send notifications or configure external monitoring.
+        run: |
+          echo "Deploy complete. You can trigger notifications or further monitoring configuration here."
+          # e.g., call a script: ./configure-monitoring.sh
