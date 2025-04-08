@@ -20,11 +20,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.11.1
-
-      # Add a step to navigate to the Terraform directory if necessary
-      - name: Navigate to Terraform directory
-        run: cd terraform  
+          terraform_version: 1.11.1 
 
       - name: Terraform Init
         run: terraform init
